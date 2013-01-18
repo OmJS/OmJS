@@ -35,8 +35,12 @@ BootLoader={_init:function(a){
                     list:null,
                     add:function(f){
                         if(BootLoader.isSet){
-                            if(f typeof "function" || f typeof "object"){
+                            if((typeof(f)=="function")||(typeof(f)=="object")){
                                 BootLoader.list.push(f);
                                 }
-                            },isSet:false
-                            };
+                            }else{
+                                BootLoader._init();
+                            	BootLoader.add(f);
+                            }
+                        },isSet:false
+            };
