@@ -5,7 +5,7 @@
 */
 
 /*
-    BootLoader[Object]:It will server the purpose of window.onload firing and Ajax.onLoad firing
+    BootLoader[Object]:It will serve the purpose of window.onload firing and Ajax.onLoad firing
     Methods-:
     _init:Use to initialise the Bootloader Array
         params: a[Array] which contains the list of functions to be fired or it can be set to true in case
