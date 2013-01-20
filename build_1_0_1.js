@@ -5,7 +5,7 @@
 */
 
 /*
-    BootLoader[Object]:It will server the purpose of window.onload firing
+    BootLoader[Object]:It will server the purpose of window.onload firing and Ajax.onLoad firing
     Methods-:
     _init:Use to initialise the Bootloader Array
         params: a[Array] which contains the list of functions to be fired or it can be set to true in case
@@ -29,9 +29,34 @@ BootLoader={_init:function(a){
                     }else{
                         if(a){
                             BootLoader.list=new Array();
+    						}
                         }
-                        }
+                        if(BootLoader.element.addEventListener)
+						BootLoader.element.addEventListener("readystatechange",BootLoader.listener,false);
+						else
+						BootLoader.element.attachEvent("onreadystatechange",BootLoader.listener,false);
                     },
+					element:document,
+                    listener:function(){
+                    	if(BootLoader.element.readyState=="complete"){
+							if(BootLoader.element.addEventListener)
+							BootLoader.element.removeEventListener("readystatechange",BootLoader.listener,false);
+							else
+							BootLoader.element.detachEvent("onreadystatechange",BootLoader.listener,false);
+						BootLoader.fire();
+						}
+                    },
+					fire:function(){
+						if(BootLoader.element.readyState=="complete"&&BootLoader.list.length>0){
+							for(func in BootLoader.list){
+								if(typeof(BootLoader.list[func])=="function"){
+									BootLoader.list[func]();
+								}else{
+									BootLoader.list[func].init();
+								}
+							}
+						}
+					},
                     list:null,
                     add:function(f){
                         if(BootLoader.isSet){
@@ -39,7 +64,7 @@ BootLoader={_init:function(a){
                                 BootLoader.list.push(f);
                                 }
                             }else{
-                                BootLoader._init();
+                            	BootLoader._init();
                             	BootLoader.add(f);
                             }
                         },isSet:false
