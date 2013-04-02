@@ -69,3 +69,27 @@ BootLoader={_init:function(a){
                             }
                         },isSet:false
             };
+function Ajax(url,method) {
+	if(this==window)
+		return new Ajax(url,method);
+	else
+		this.object=(window.XMLHttpRequest)?new window.XMLHttpRequest():new window.ActiveXObject("Microsoft.XMLHTTP");
+		this.url=url;
+		this.d=null;
+		this.onError=[];
+		this.method=method?method:"POST";
+		return this;
+}
+	Ajax.prototype.data=function(data){
+								this.d=data;
+							return this;
+					};
+	Ajax.prototype.send=function(callbacks){
+	this.object.open(this.method,this.url,true);
+		for(headers in this.d){
+			this.object.setRequestHeader(headers,this.d[headers]);
+		}
+		this.object.onreadystatechange=callbacks;
+		this.object.send(this.url,null,true);
+		return this;
+	}
