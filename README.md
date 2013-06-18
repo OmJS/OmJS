@@ -22,11 +22,11 @@ BootLoader.add(function(){
  }
  );
 ```
-  It is equivalent to the jquery's - $(document).ready();
+  It is equivalent to the jquery's ``` $(document).ready(); ```
 
 ## Animate
 
-  Wanna have some simple yet easy to use animation function? You can do it in various flavours
+  Wanna have some simple yet easy to use animation function? You can do it in various flavors
 ```  
  Animate(DomObject).fadeIn(20);
  Animate(DomObject).squash({opacity:1, width:378}, 10);
