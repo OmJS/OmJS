@@ -250,7 +250,7 @@ $=function(id){return document.getElementById(id) ? document.getElementById(id) 
 	A Prototype RequireJs Functionality
 */
 require = {
-	CDN_PATH: "http://localhost/mymik/static.mk/",
+	CDN_PATH: "your cdn path goes here",
 	working: false,
 	list: [],
 	listener: function(elem){
