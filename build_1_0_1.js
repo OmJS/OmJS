@@ -209,8 +209,9 @@ Animate.prototype.__each=function(object, property, start, end, inc, unit, timer
 		if (!unit) {
 			unit="";
 		}
+		var expander=inc;
 		var ticker=setInterval(function(){
-			var expander=inc;
+			
 			object.setAttribute(property+timer,true);
 			if (start<end) {
 				if (getABS(object.style[property])<end) {
@@ -245,3 +246,63 @@ function getABS(value){
 	}
 }
 $=function(id){return document.getElementById(id) ? document.getElementById(id) : null;}
+/*
+	A Prototype RequireJs Functionality
+*/
+require = {
+	CDN_PATH: "http://localhost/mymik/static.mk/",
+	working: false,
+	list: [],
+	listener: function(elem){
+	if (!require.working) {
+		require.working = true;
+		var head = document.getElementsByTagName("head")[0];
+		if (!elem) {
+		var element = require.list.shift();
+			if (element){
+				head.appendChild(element);
+				require.working = false;
+				return true;
+			} else {
+				require.working = false;
+				return false;
+			}
+		} else {
+			if(elem.nodeName)
+				head.appendChild(elem);
+			else
+				require.working = false;
+		}
+		require.working = false;
+	}
+},
+	add: function(object, callback, errorListener, async){
+	if (object.type == "js") {
+		var src = object.src;
+		var Tag = document.createElement("script");
+		Tag.src = this.CDN_PATH+src;
+		Tag.type = "text/javascript";
+	} else {
+		var src = object.src;
+		var Tag = document.createElement("link");
+		Tag.href = this.CDN_PATH+src;
+		Tag.rel = "stylesheet";
+		Tag.media = "all";
+	}
+	if (callback)
+		Event("load", Tag).bind(callback);
+	if (errorListener)
+		Event("error", Tag).bind(errorListener);
+	if (!async) {
+		require.list.push(Tag);
+		Event("load", Tag).bind(require.listener);
+		} else {
+			require.listener(Tag);
+			return true;
+		}
+	
+	if (!require.working) {
+		require.listener();
+	}
+	}
+}
