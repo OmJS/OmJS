@@ -45,3 +45,28 @@ Event("click", DomObject).bind(function(){
    */
  }, isBubble);
 ```
+## JSON
+
+In OmJS, JSON is treated as the smallest component to help you with the following things:
+* To Parse a string into a JS object
+```
+var object = JSON.parse( string, errorHandler);
+```
+* To replace character stuffing from the strings use to format the data
+```
+var object = JSON.toString( string, characterToSearch, characterToReplaceWith);
+```
+for example
+```
+/*
+	Below will output "Hi! I am Good"
+*/
+var object = JSON.toString( "Hi\u2323 I am good", "\u2323", "!");
+```
+
+## require Object
+
+To inject CSS, JS objects you can use the require object, its easy and robust, you can load the files asynchronously or synchronously.
+```
+require.add( {type: "js", src: "myJsFile.js"}, onLoadHandler, errorHandler );
+```
