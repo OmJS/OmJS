@@ -88,6 +88,16 @@ function Ajax(url,method,element) {
 		this.method=method?method:"POST";
 		return this;
 }
+Ajax.prototype.JSON=function(c){
+		this.object.JSONCallback=c;
+		this.send(this.JSONHandler);
+	};
+Ajax.prototype.JSONHandler=function(xhr, form) {
+	this.JSONCallback(JSON.parse(this.responseText, this.errorHandler), form);
+}
+Ajax.prototype.onError=function(callback){
+	this.object.errorHandler = callback;
+}
 Ajax.prototype.data=function(raw_data){
 	/*
 		If it is a Form Element
