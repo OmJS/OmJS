@@ -68,9 +68,12 @@ BootLoader={_init:function(a){
                             	BootLoader.add(f);
                             }
                         },isSet:false
-            };
-
-	function Ajax(url,method,element) {
+};
+/*
+	XHR Module
+	Compatibility: All, IE7+
+*/
+function Ajax(url,method,element) {
 	if(this==window)
 		return new Ajax(url,method);
 	else
@@ -85,46 +88,85 @@ BootLoader={_init:function(a){
 		this.method=method?method:"POST";
 		return this;
 }
-	Ajax.prototype.data=function(raw_data){
-							/*
-								If it is a Form Element
-							*/
-							if(raw_data.elements){
-								this.d="";
-								this.object.form=raw_data;
-								for(i=0;i<raw_data.elements.length;i++){
-									if(raw_data.elements[i].type!="button"&&raw_data.elements[i].type!="reset"&&raw_data.elements[i].type!="submit")
-									this.d+="&" + raw_data.elements[i].name + "=" + raw_data.elements[i].value;
-								}
-							}else{
-								this.d="";
-								for(elem in raw_data){
-									this.d+=elem+"="+raw_data[elem];
-								}
-							}
-							return this;
-					};
-	Ajax.prototype.send=function(callbacks){
+Ajax.prototype.data=function(raw_data){
+	/*
+		If it is a Form Element
+	*/
+	if(raw_data.elements){
+		this.d="";
+		this.object.form=raw_data;
+		for(i=0;i<raw_data.elements.length;i++){
+			if(raw_data.elements[i].type!="button"&&raw_data.elements[i].type!="reset"&&raw_data.elements[i].type!="submit")
+				this.d+="&" + raw_data.elements[i].name + "=" + raw_data.elements[i].value;
+			}
+		}else{
+			this.d="";
+			for(elem in raw_data){
+				this.d+=elem+"="+raw_data[elem];
+			}
+		}
+	return this;
+};
+Ajax.prototype.send=function(callbacks){
 	this.object.open(this.method,this.url,true);
-		if(this.method=="POST")
+	if(this.method=="POST")
 		this.object.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		this.object.callback=callbacks;
-		this.object.onreadystatechange=this.handler;
-		this.object.send(this.d);
-		return this;
-	}
-	Ajax.prototype.handler=function(xhr){
-		if(this.readyState==4){
-						if(this.status==200){
-							this.callback(this,this.form);
-								
-						} else {
-							if (this.form) 
-							this.form.setAttribute("_ajax",0);
-							alert("Could not connect!\nPlease try again.");
-						}
+		
+	this.object.callback=callbacks;
+	this.object.onreadystatechange=this.handler;
+	this.object.send(this.d);
+	return this;
+}
+Ajax.prototype.handler=function(xhr){
+	if(this.readyState==4){
+		if(this.status==200){
+			this.callback(this,this.form);
+		} else {
+				if (this.form) 
+					this.form.setAttribute("_ajax",0);
 		}
 	}
+}
+/*
+	Simplest JSON for you :p
+*/
+JSON={
+	toString:function(data, character, toChar){
+		while (data.indexOf(character)!=-1) {
+			data=data.replace(character, toChar);
+		}
+		return data;
+	},
+	parse:function(text, errorHandler){
+		try{
+		if(text.length<9) {
+			throw new Error();	
+		}
+			var data=eval(text);
+			var dummyObject={};
+			for(a in data) {
+				dummyObject[a]=data[a];
+			}
+		return dummyObject;
+		} catch(e){
+			console.log(text);
+			if (!errorHandler) {
+				DOM.log("JSON parse Error");
+				if (Utils.current)
+					Utils.current.release();
+				if (System.state)
+					System.state = 0;
+				DOM._rsl();
+			} else {
+				errorHandler();
+			}
+		}
+	}
+};
+/*
+	The Proficient Event Binders
+	Comaptibility: All, IE7+
+*/
 function Event(type,object){
 	if (this==window) {
 		return new Event(type,object);
@@ -148,6 +190,10 @@ Event.prototype.unbind=function(func,bubble){
 		this.object.detachEvent("on"+this.type, this.__func, (bubble ? true : false));
 };
 
+/*
+	Lame Animations BETA
+	Unstable
+*/
 function Animate(object){
 	if (this==window) {
 		return new Animate(object);
@@ -193,7 +239,9 @@ Animate.prototype.squash=function(props, timer){
 		
 	}
 }
-
+/*
+	The CORE animation handler
+*/
 Animate.prototype.__each=function(object, property, start, end, inc, unit, timer, override){
 	/*
 		We dont want to fall in multiple animations running at same instance
@@ -250,7 +298,7 @@ $=function(id){return document.getElementById(id) ? document.getElementById(id) 
 	A Prototype RequireJs Functionality
 */
 require = {
-	CDN_PATH: "your cdn path goes here",
+	CDN_PATH: "./",
 	working: false,
 	list: [],
 	listener: function(elem){
