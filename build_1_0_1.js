@@ -78,7 +78,7 @@ function XHR(url,method,element) {
 		return new XHR(url,method);
 	else
 		this.object=(window.XMLHttpRequest)?new window.XMLHttpRequest():new window.ActiveXObject("Microsoft.XMLHTTP");
-		this.url=url;
+		this.url=url?url:(element?(element.action?element.action:""):"");
 		this.d=null;
 		this.onError=[];
 		this.object.form=null;
