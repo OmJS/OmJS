@@ -6,6 +6,12 @@ Primary focus for making it compliant to port with Firefox Os Apps, so that a to
 For more info check this out:
 omjs.blogspot.com
 
+Upcoming
+========
+* CSS3 animation - Browsers with no support for CSS3 will no longer be supported in upcoming version
+* XHR.upload - A robust uploading functionality
+* XHR.float - Using History API, providing floating navigation
+
 How to use
 ==========
 
