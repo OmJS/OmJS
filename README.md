@@ -69,6 +69,32 @@ for example
 var object = JSON.toString( "Hi\u2323 I am good", "\u2323", "!");
 ```
 
+## XHR Class
+A simplest API to help you out with your XHR calls, you can attach it to a form element or call it individually, it just work awesome in both the cases
+
+```
+var xhr = new XHR( URL, Method, Form Element/optional);
+xhr.send(function(xhr){
+	/*
+		xhr param here is the original XMLHTTPREQUEST object,
+		so you can use xhr.responseText to access output and so on
+	*/
+});
+```
+If you provide a form element as an input, then URL and Method are automatically picked up from the form DOM Node.
+The beauty still doesn't end, what about JSON XHR calls?
+Well that too is possible:
+
+```
+var xhr = new XHR( "http://testserver/test?q=2", "GET");
+xhr.JSON(function(data){
+	/*
+		Process things
+	*/
+});
+```
+
+
 ## require Object
 
 To inject CSS, JS objects you can use the require object, its easy and robust, you can load the files asynchronously or synchronously.
