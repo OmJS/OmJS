@@ -5,7 +5,7 @@
 */
 
 /*
-    BootLoader[Object]:It will serve the purpose of window.onload firing and Ajax.onLoad firing
+    BootLoader[Object]:It will serve the purpose of window.onload firing
     Methods-:
     _init:Use to initialise the Bootloader Array
         params: a[Array] which contains the list of functions to be fired or it can be set to true in case
@@ -73,9 +73,9 @@ BootLoader={_init:function(a){
 	XHR Module
 	Compatibility: All, IE7+
 */
-function Ajax(url,method,element) {
+function XHR(url,method,element) {
 	if(this==window)
-		return new Ajax(url,method);
+		return new XHR(url,method);
 	else
 		this.object=(window.XMLHttpRequest)?new window.XMLHttpRequest():new window.ActiveXObject("Microsoft.XMLHTTP");
 		this.url=url;
@@ -84,21 +84,21 @@ function Ajax(url,method,element) {
 		this.object.form=null;
 		this.object.callback=null;
 		this.object.element=element?element:null;
-		this.object.ajax=this;
+		this.object.ref=this;
 		this.method=method?method:"POST";
 		return this;
 }
-Ajax.prototype.JSON=function(c){
+XHR.prototype.JSON=function(c){
 		this.object.JSONCallback=c;
 		this.send(this.JSONHandler);
 	};
-Ajax.prototype.JSONHandler=function(xhr, form) {
+XHR.prototype.JSONHandler=function(xhr, form) {
 	this.JSONCallback(JSON.parse(this.responseText, this.errorHandler), form);
 }
-Ajax.prototype.onError=function(callback){
+XHR.prototype.onError=function(callback){
 	this.object.errorHandler = callback;
 }
-Ajax.prototype.data=function(raw_data){
+XHR.prototype.data=function(raw_data){
 	/*
 		If it is a Form Element
 	*/
@@ -117,7 +117,7 @@ Ajax.prototype.data=function(raw_data){
 		}
 	return this;
 };
-Ajax.prototype.send=function(callbacks){
+XHR.prototype.send=function(callbacks){
 	this.object.open(this.method,this.url,true);
 	if(this.method=="POST")
 		this.object.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -127,7 +127,7 @@ Ajax.prototype.send=function(callbacks){
 	this.object.send(this.d);
 	return this;
 }
-Ajax.prototype.handler=function(xhr){
+XHR.prototype.handler=function(xhr){
 	if(this.readyState==4){
 		if(this.status==200){
 			this.callback(this,this.form);
